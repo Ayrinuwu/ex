@@ -1,0 +1,84 @@
+#include <iostream>
+
+using namespace std;
+
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+};
+
+void buildBalancedTree(Node*& root, int arr[], int start, int end) {
+    if (start > end) return;
+    int mid = (start + end) / 2;
+    root = new Node;
+    root->data = arr[mid];
+    root->left = NULL;
+    root->right = NULL;
+    buildBalancedTree(root->left, arr, start, mid - 1);
+    buildBalancedTree(root->right, arr, mid + 1, end);
+}
+
+void splitTree(Node* root, int negArr[], int posArr[], int& negCount, int& posCount) {
+    if (root == NULL) return;
+    splitTree(root->left, negArr, posArr, negCount, posCount);
+    if (root->data < 0) {
+        negArr[negCount++] = root->data;
+    }
+    else {
+        posArr[posCount++] = root->data;
+    }
+    splitTree(root->right, negArr, posArr, negCount, posCount);
+}
+
+void printTree(Node* root,int indent=0) {
+    cout << '\n';
+    if (root == nullptr) return;
+
+    printTree(root->right, indent + 1);
+
+    for (int i = 0; i < indent; i++) cout << '\t';
+    cout << root->data << '\n';
+    printTree(root->left, indent + 1);
+}
+
+int main() {
+    Node* root = new Node;
+    root->data = 5;
+    root->left = new Node;
+    root->left->data = -2;
+    root->left->left = new Node;
+    root->left->left->data = -4;
+    root->left->left->left = NULL;
+    root->left->left->right = NULL;
+    root->left->right = new Node;
+    root->left->right->data = 3;
+    root->left->right->left = NULL;
+    root->left->right->right = NULL;
+    root->right = new Node;
+    root->right->data = 8;
+    root->right->left = NULL;
+    root->right->right = new Node;
+    root->right->right->data = 10;
+    root->right->right->left = NULL;
+    root->right->right->right = NULL;
+
+    int negArr[100], posArr[100];
+    int negCount = 0, posCount = 0;
+    splitTree(root, negArr, posArr, negCount, posCount);
+
+    Node* negRoot = NULL;
+    Node* posRoot = NULL;
+    buildBalancedTree(negRoot, negArr, 0, negCount - 1);
+    buildBalancedTree(posRoot, posArr, 0, posCount - 1);
+
+    cout << "Negative tree: ";
+    printTree(negRoot);
+    cout << endl;
+
+    cout << "Positive tree: ";
+    printTree(posRoot);
+    cout << endl;
+
+    return 0;
+}
