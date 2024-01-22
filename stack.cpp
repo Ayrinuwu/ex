@@ -67,3 +67,43 @@ int Stack::count(const int value) const {
         if (node->value == value) ++cnt;
     return cnt;
 }
+//other version
+
+#include <iostream>
+
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+};
+
+void push(Node*& top, int data) {
+    Node* newNode = new Node;
+    newNode->data = data;
+    newNode->next = top;
+    top = newNode;
+}
+
+int pop(Node*& top) {
+    if (top == NULL) {
+        cout << "Stack is empty." << endl;
+        return 0;
+    }
+    else {
+        int data = top->data;
+        Node* temp = top;
+        top = top->next;
+        delete temp;
+        return data;
+    }
+}
+
+void printStack(Node* top) {
+    cout << "Stack: ";
+    while (top != NULL) {
+        cout << top->data << " ";
+        top = top->next;
+    }
+    cout << endl;
+}
