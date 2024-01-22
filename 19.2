@@ -41,28 +41,36 @@ void printTree(Node* root,int indent=0) {
     cout << root->data << '\n';
     printTree(root->left, indent + 1);
 }
+void insert(Node*& root, int data) {
+    if (root == NULL) {
+        root = new Node;
+        root->data = data;
+        root->left = NULL;
+        root->right = NULL;
+    }
+    else if (data < root->data) {
+        insert(root->left, data);
+    }
+    else {
+        insert(root->right, data);
+    }
+}
+
+void buildTree(Node*& root) {
+    int n;
+    cout << "Enter the number of nodes: ";
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        int data;
+        cout << "Enter node #" << i + 1 << ": ";
+        cin >> data;
+        insert(root, data);
+    }
+}
 
 int main() {
-    Node* root = new Node;
-    root->data = 5;
-    root->left = new Node;
-    root->left->data = -2;
-    root->left->left = new Node;
-    root->left->left->data = -4;
-    root->left->left->left = NULL;
-    root->left->left->right = NULL;
-    root->left->right = new Node;
-    root->left->right->data = 3;
-    root->left->right->left = NULL;
-    root->left->right->right = NULL;
-    root->right = new Node;
-    root->right->data = 8;
-    root->right->left = NULL;
-    root->right->right = new Node;
-    root->right->right->data = 10;
-    root->right->right->left = NULL;
-    root->right->right->right = NULL;
-
+    Node* root = NULL;
+    buildTree(root);
     int negArr[100], posArr[100];
     int negCount = 0, posCount = 0;
     splitTree(root, negArr, posArr, negCount, posCount);
@@ -82,3 +90,4 @@ int main() {
 
     return 0;
 }
+
